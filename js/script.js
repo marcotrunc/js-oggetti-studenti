@@ -74,38 +74,62 @@ studNameLastname.innerHTML = `${message}`;
 
 const button = document.getElementById('button');
 const register = document.getElementById('register');
+
 // Funzione che mi costruisce una tabella
 const tableCostruction = (currentElement) => {
-    const table = document.createElement('table');
-    const keysArray = Object.getOwnPropertyNames(currentElement);
+    const keysArray = Object.keys(currentElement);
     console.log(keysArray);
-    for (let i = 0; i < keysArray; i++) {
+
+    register.innerHTML = '';
+
+    const table = document.createElement('table');
+    const trHead = document.createElement('tr');
+    table.appendChild(trHead);
+
+    for (let i = 0; i < keysArray.length; i++) {
         currentKey = keysArray[i];
-        const tr = document.createElement('tr');
         const td = document.createElement('td');
-        const tdText = `${currentKey}`;
-        td.appendChild(tdText);
-        tr.appendChild(td);
-        table.appendChild(tr);
+        td.innerHTML = `${currentKey}`;
+        trHead.appendChild(td);
+    }
+
+    for (let y = 0; y < students.length; y++) {
+        const currentStudents = students[y];
+        const trBody = document.createElement('tr');
+        for (let j = 0; j < keysArray.length; j++) {
+            currentKey = keysArray[j];
+            const tdValue = document.createElement('td');
+            tdValue.innerHTML = `${currentStudents[currentKey]}`;
+            trBody.appendChild(tdValue);
+
+        }
+        table.appendChild(trBody);
     }
     return table
 }
+
+
 // Funzione che mi gestisce le operazioni al click
 const onClick = () => {
     const nameValue = document.getElementById('name').value;
     const lastNameValue = document.getElementById('last-name').value;
     const ageValue = document.getElementById('age').value;
+    const containerTable = document.getElementById('container-table')
+
+    let currentStudents;
 
     const currentElement = {
         name: nameValue,
         lastName: lastNameValue,
         age: ageValue,
     }
+
     students.push(currentElement)
-    const newTable = tableCostruction(currentElement);
-    register.appendChild(newTable);
-    console.table(students);
+    const table = tableCostruction(currentElement);
+    register.appendChild(table);
+
+    containerTable.classList.remove('d-none');
+    register.classList.remove('d-none');
 
 }
-
-button.addEventListener('click', () => onClick());
+button.addEventListener('click', onClick);
